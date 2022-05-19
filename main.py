@@ -7,12 +7,15 @@ class CLI:
     def __init__(self):
         self.state = True
         self.shiftReports = []
+        
+        # Test Data begins
         sr1 = ShiftReport(
                         date(year=2022, month=4, day=23), 
                         timedelta(hours=9, minutes=00, seconds=00),
                         date(year=2022, month=4, day=23),
                         timedelta(hours=17, minutes=00, seconds=00))
         self.shiftReports.append(sr1)
+        ## Test Data ends
 
     # while self.state is true - runs the main menu -- main function --
     def main_menu(self):
