@@ -1,21 +1,14 @@
 from datetime import date,timedelta
 from Shift_Report import ShiftReport 
+import Save_Load as SL
 
 class CLI:
 
     # constructor that holds a state variable and a list of shiftReports
     def __init__(self):
+
         self.state = True
-        self.shiftReports = []
-        
-        # Test Data begins
-        sr1 = ShiftReport(
-                        date(year=2022, month=4, day=23), 
-                        timedelta(hours=9, minutes=00, seconds=00),
-                        date(year=2022, month=4, day=23),
-                        timedelta(hours=17, minutes=00, seconds=00))
-        self.shiftReports.append(sr1)
-        ## Test Data ends
+        self.shiftReports = SL.load()
 
     # while self.state is true - runs the main menu -- main function --
     def main_menu(self):
@@ -44,15 +37,18 @@ class CLI:
         else:
             print("\n<-- Please enter a valid option -->\n")
 
-    # Gets the date info and returns a date object - startOrEnd is either "start" or "end" date
-    def get_date(self, startOrEnd:str):
+    # Gets the date info and returns a date object
+    def get_date(self):
 
         while True:
             try:
-                month, day, year = [int(num) for num in input(f"\nEnter the {startOrEnd} date (MM DD YYYY)\n").split()]
-                date_to_return = date(year, month, day)
+                month, day, year = [int(num) for num in input(f"\nEnter the shift date (MM DD YYYY)\n").split()]
+
                 if month > 12 or day > 31:
                     raise ValueError
+
+                date_to_return = date(year, month, day)
+
             except ValueError:
                 print("\n<-- Please enter date as MM DD YYYY with a space inbetween - ex. 01 25 2022 -->\n")
             except TypeError:
@@ -66,9 +62,11 @@ class CLI:
         while True:
             try:
                 hour, minute, second = [int(num) for num in input(f"\nEnter the {startOrEnd} time (24h: HH MM SS)\n").split()]
+
                 if hour > 24 or minute > 59 or second > 59:
                     raise ValueError
                 time_to_return = timedelta(hours=hour, minutes=minute, seconds=second)
+
             except ValueError:
                 print("\n<-- Please enter time as HH MM SS with a space inbetween - ex. 22 45 00 -->\n")
             except TypeError:
@@ -79,26 +77,30 @@ class CLI:
     # gathers all shift report information required to make a shift report object
     def get_shiftReport_info(self):
 
-        startDate = self.get_date("start")
-        endDate = self.get_date("end")
+        shiftDate = self.get_date()
         startTime = self.get_times("start")
         endTime = self.get_times("end")
-        self.add_shiftReport(startDate, endDate, startTime, endTime)
+        self.add_shiftReport(shiftDate, startTime, endTime)
 
     # creates a shift report object and appends it to the shiftreports list
-    def add_shiftReport(self, startDate:date, endDate:date, startTime:timedelta, endTime:timedelta):
+    def add_shiftReport(self, shiftDate:date, startTime:timedelta, endTime:timedelta):
 
-        sr = ShiftReport(startDate, startTime, endDate, endTime)
+        sr = ShiftReport(shiftDate, startTime, endTime)
         self.shiftReports.append(sr)
+        SL.save(self.shiftReports)
     
+    # prints all shift reports
     def print_all_shiftReports(self):
+
         print("\n" + "-" * 80)
-        print("   Start Date   |   End Date   |   Start Time   |   End Time   |   Total Hours")
+        print("   Shift Date   |   Start Time   |   End Time   |   Total Hours   ")
         print("-" * 80 + "\n")
+
         for sr in self.shiftReports:
-            print("   " + str(sr.get_startDate()) + "   |  "  + str(sr.get_endDate()) + 
-            "  |    " + str(sr.get_startTime()) + "     |   " + str(sr.get_endTime()) + 
+            print("   " + str(sr.get_shiftDate()) + "   |    " + str(sr.get_startTime()) + 
+            "     |   " + str(sr.get_endTime()) + 
             "   |    " + str(sr.get_totalHours()))
+
         print("\n" + "-" * 80 + "\n\n")
 
 CLI().main_menu()

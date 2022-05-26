@@ -3,39 +3,36 @@ from datetime import date, timedelta
 class ShiftReport:
 
     #--- Constructor ---#
-    def __init__(self, startDate:date, startTime:timedelta, endDate:date, endTime:timedelta):
-        self.startDate = startDate
-        self.startTime = startTime
-        self.endDate = endDate
-        self.endTime = endTime
-        self.totalHours = self.endTime - self.startTime
+    def __init__(self, shiftDate:date, starTime:timedelta, endTime:timedelta):
+        self.shiftDate:date = shiftDate
+        self.startTime:timedelta = starTime
+        self.endTime:timedelta = endTime
+        self.totalHours:timedelta = self.endTime - self.startTime
 
     #--- GETTERS ---#
-    def get_startDate(self):
-        return self.startDate
+    def get_shiftDate(self) -> date:
+        return self.shiftDate
 
-    def get_startTime(self):
+    def get_startTime(self) -> timedelta:
         return self.startTime
 
-    def get_endDate(self):
-        return self.endDate
-
-    def get_endTime(self):
+    def get_endTime(self) -> timedelta:
         return self.endTime
     
-    def get_totalHours(self):
+    def get_totalHours(self) -> timedelta:
         return self.totalHours
 
     #--- SETTERS --- #
-    def set_startDate(self, newSD:date):
-        self.startDate = newSD
+    def set_shiftDate(self, newSD:date):
+        self.shiftDate = newSD
 
     def set_startTime(self, newST:timedelta):
         self.startTime = newST
 
-    def set_endDate(self, newED:date):
-        self.endDate = newED
-
     def set_endTime(self, newET:timedelta):
         self.endTime = newET
         
+    def as_dict(self):
+        return {"Date": str(self.shiftDate),
+                "Start Time": str(self.startTime),
+                "End Time": str(self.endTime)}
