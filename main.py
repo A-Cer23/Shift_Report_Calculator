@@ -87,7 +87,14 @@ class CLI:
 
         sr = ShiftReport(shiftDate, startTime, endTime)
         self.shiftReports.append(sr)
+        self.shiftReports.sort(key=lambda e: e.get_shiftDate(), reverse=True)
         SL.save(self.shiftReports)
+
+    def update_shiftReport(self):
+        pass
+
+    def delete_shiftReport(self):
+        pass
     
     # prints all shift reports
     def print_all_shiftReports(self):
